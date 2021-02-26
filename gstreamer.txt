@@ -1,5 +1,44 @@
 /streamer 보내기
-gst-launch-1.0 -v v4l2src device=/dev/video6 ! video/x-raw, width=640, height=480 ! videoconvert ! jpegenc ! rtpjpegpay ! udpsink host=10.90.1.50 port=5000
+gst-launch-1.0 -v v4l2src device=/dev/video0 ! video/x-raw, width=640, height=480 ! videoconvert ! jpegenc ! rtpjpegpay ! udpsink host=10.90.1.50 port=5000
 
 / 받기
 gst-launch-1.0 udpsrc port=5000 ! application/x-rtp,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! autovideosink
+
+
+
+Gstreamer
+
+
+웹캠으로 가능한 매개변수를 설치해야하는 간단한 프로그램
+
+sudo apt install v4l-uitls
+
+
+파이프라인
+소스에서 싱크로 이동 한 다음 중간에 작업을 수행한다.
+소스가 동기화와 일치하지 않으면 변환을 수행해야 한다.
+
+
+1. 소스에서 오디오 톤을 지정하고 스피커를 잘 동기화 하는법
+
+느낌표는 한 모듈을 다른 모듈에 연결하는 것.
+
+# 오디오 테스트
+gst-launch-1.0 audiotestsrc ! alsasink
+
+# 오디오 테스트에 관한 모듈 같은거 디테일 같은거 볼 수 잇음.
+# 소스템플릿으로 가서 확인해봐.
+# 싱크는 모듈에 대한 입력과 같다.
+# 소스는 출력과 같다.
+# 오디오테스트 소스 인 모듈소스 
+gst-inspect-1.0 audiotestsrc
+
+속성은 설정할 수 잇음.
+설정할 수 있는 것들은 name, parent, blokcsize… , wave 등등 다양함.
+
+# 구현파. 소리 종류 설정.
+Gst-launch-1.0 audiotestsrc wave=1 ! alsasink
+
+# frequency 도 설정
+Gst-launch-1.0 audiotestsrc wave=1 freq=200 ! alsasink
+`
