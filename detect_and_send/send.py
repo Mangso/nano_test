@@ -5,8 +5,9 @@ import buffer
 import cv2
 import numpy as np
 
-HOST = '192.168.0.18'
+#HOST = '192.168.0.18'
 #HOST = '127.0.0.1'
+HOST = '58.142.223.232'
 PORT = 2345
 
 frame_size = 416
@@ -45,14 +46,15 @@ def isPeople(frame):
             #print("Confidence : " , confidence)
             if class_id == 0 and confidence > min_confidence:
                 print("Confidence : " , confidence)
-                print("DETEcT*********************")
+                print("***************DETECT*********************")
                 return True
     
     return False
 
 path = './receive_video/'
-
+os.system(f"rm ./receive_video/*.mp4")
 while True:
+    #os.system(f"rm ./receive_video/*.mp4")
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
     
